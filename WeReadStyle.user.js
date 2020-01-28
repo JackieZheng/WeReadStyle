@@ -6,7 +6,7 @@
 // @match        *://weread.qq.com/web/reader/*
 // @grant    GM_addStyle
 // @namespace https://greasyfork.org/users/164689
-// @supportURL   https://github.com/JackieZheng/wereadSytle/issues
+// @supportURL   https://github.com/JackieZheng/WeReadStyle/issues
 // ==/UserScript==
 
 GM_addStyle(".readerControls_fontSize,.readerControls_item{background-color: #3e5b94ba !important;}");
