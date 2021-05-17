@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         微信读书阅读样式 
-// @version      0.07
+// @version      0.1
 // @description  微信读书阅读样式 自定义
 // @author       By Jackie http://csdn.admans.cn/
 // @match        *://weread.qq.com/web/reader/*
