@@ -19,27 +19,32 @@ GM_addStyle(".readerChapterContent.navBarOffset{padding-top:20px !important;}");
 GM_addStyle(".readerChapterContent.navBarOffset{padding-top:20px !important;}");
 GM_addStyle(".renderTargetContainer .wr_selection {background: #2bfc005c !important;}");
 GM_addStyle(".renderTargetContainer .wr_underline.s0{border-bottom: 2px solid #7ec307ed;background-image: none !important;}");
- 
-(function(){
-        'use strict'; 
-        document.onclick=function(event){
-            console.log(event.target);
-            if(event.target&&hasClassName(event.target,"icon"))
-            {
-              return false;
-            }
-            if(document.getElementsByClassName("readerTopBar")[0].style.display=='none')
-            {
-                document.getElementsByClassName("readerTopBar")[0].style.display='flex';
-                document.getElementsByClassName("readerControls")[0].style.display='flex';            
-            }
-            else
-            {
-                document.getElementsByClassName("readerTopBar")[0].style.display='none';
-                document.getElementsByClassName("readerControls")[0].style.display='none';    
-            }
-        }       
 
+var z;
+(function(){
+    'use strict';
+    z=document.body.style.zoom||1;
+    document.onclick=function(event){
+        console.log(event.target);
+        if(event.target&&hasClassName(event.target,"icon"))
+        {
+            return false;
+        }
+        if(document.getElementsByClassName("readerTopBar")[0].style.display=='none')
+        {
+            document.getElementsByClassName("readerTopBar")[0].style.display='flex';
+            document.getElementsByClassName("readerControls")[0].style.display='flex';
+        }
+        else
+        {
+            document.getElementsByClassName("readerTopBar")[0].style.display='none';
+            document.getElementsByClassName("readerControls")[0].style.display='none';
+        }
+    }
+    window.onkeydown=function (e) {
+        console.log(e.key);
+        zoomBody(e.key);
+    }
 
 
 })();
@@ -51,6 +56,23 @@ function hasClassName(obj,name){
         return true;
     }else{
         return false;
+    }
+}
+
+function zoomBody(tag)
+{
+    if(tag=='-'&& z>0.5)
+    {
+        z=z-0.1;
+    }
+    if(tag=='=' && z<2)
+    {
+        z=z+0.1;
+    }
+    document.body.style.zoom=z;
+    try{
+        var ev = document.createEvent('Event');ev.initEvent('resize', true, true);window.dispatchEvent(ev);
+    }catch (e) {
     }
 }
 
