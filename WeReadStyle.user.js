@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         微信读书阅读样式 
-// @version      0.1
+// @version      0.11
 // @description  微信读书阅读样式 自定义
 // @author       By Jackie http://csdn.admans.cn/
 // @match        *://weread.qq.com/web/reader/*
@@ -68,6 +68,10 @@ function zoomBody(tag)
     if(tag=='=' && z<2)
     {
         z=z+0.1;
+    }
+    if(tag=='0')
+    {
+        z=1;
     }
     document.body.style.zoom=z;
     try{
