@@ -1,6 +1,7 @@
 // ==UserScript==
-// @name         微信读书阅读样式 
-// @version      0.11
+// @license MIT
+// @name         微信读书阅读样式
+// @version      0.22
 // @description  微信读书阅读样式 自定义
 // @author       By Jackie http://csdn.admans.cn/
 // @match        *://weread.qq.com/web/reader/*
@@ -10,7 +11,7 @@
 // ==/UserScript==
 
 GM_addStyle(".readerControls_fontSize,.readerControls_item{background-color: #3e5b94ba !important;}");
-GM_addStyle(".renderTargetContainer{padding:0 40px !important;}");
+GM_addStyle(".renderTargetContainer{padding:0 0px !important;}");
 GM_addStyle(".readerControls{margin-left: calc(50% - 60px) !important;}");
 GM_addStyle(".app_content{width:100%;max-width:100% !important;padding-top:0;}");
 GM_addStyle(".readerTopBar{width:100%;max-width:100% !important;left:0;}");
