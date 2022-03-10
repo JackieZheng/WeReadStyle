@@ -1,7 +1,7 @@
 // ==UserScript==
-// @license MIT
 // @name         微信读书阅读样式
-// @version      0.30
+// @version      0.31
+// @license MIT
 // @description  微信读书阅读样式 自定义
 // @author       By Jackie http://csdn.admans.cn/
 // @match        *://weread.qq.com/web/reader/*
@@ -11,6 +11,7 @@
 // ==/UserScript==
 
 GM_addStyle(".readerControls_fontSize,.readerControls_item{background-color: #3e5b94ba !important;}");
+GM_addStyle(".download{display:none !important;}");
 GM_addStyle(".renderTargetContainer{padding:0 0px !important;}");
 GM_addStyle(".readerControls{margin-left: calc(50% - 60px) !important;}");
 GM_addStyle(".app_content{width:100%;max-width:100% !important;padding-top:0;}");
@@ -20,7 +21,13 @@ GM_addStyle(".readerChapterContent.navBarOffset{padding-top:20px !important;}");
 GM_addStyle(".readerChapterContent.navBarOffset{padding-top:20px !important;}");
 GM_addStyle(".renderTargetContainer .wr_selection {background: #2bfc005c !important;}");
 GM_addStyle(".renderTargetContainer .wr_underline.s0{border-bottom: 2px solid #7ec307ed;background-image: none !important;}");
-GM_addStyle(".readerChapterContent .s-pic,.preRenderContainer .preRenderContent img, .renderTargetContainer .renderTargetContent img {opacity: 1 !important;transform:scale(1,1.1);filter:drop-shadow( 1px 0);margin-top:-.15em !important;margin-left:-0.05em !important;}");
+GM_addStyle(".readerChapterContent .s-pic,.preRenderContainer .preRenderContent img, .renderTargetContainer .renderTargetContent img {opacity: 1 !important;transform:scale(1,1.1);filter:drop-shadow( 1px 0);margin-top:-.2em !important;margin-left:-0.05em !important;}");
+
+
+GM_addStyle(".readerTopBar,.readerNoteList,.readerTopBar_title_chapter,.readerTopBar_title_link,.bookInfo_title,.readerCatalog_list{font-family: SourceHanSerifCN-Bold !important;}");
+
+
+
 
 var z;
 (function(){
