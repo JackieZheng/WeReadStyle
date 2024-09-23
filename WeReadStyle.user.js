@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         微信读书阅读样式
-// @version      0.71
+// @version      1.01
 // @license MIT
 // @description  微信读书阅读样式 自定义
 // @author       By Jackie http://csdn.admans.cn/
@@ -9,7 +9,7 @@
 // @namespace https://greasyfork.org/users/164689
 // @supportURL   https://github.com/JackieZheng/WeReadStyle/issues
 // ==/UserScript==
-
+GM_addStyle("button,.readerControls .icon{cursor: pointer !important;}");
 GM_addStyle(".readerControls_fontSize,.readerControls_item{background-color: #3e5b94ba !important;}");
 GM_addStyle(".download{display:none !important;}");
 GM_addStyle(".renderTargetContainer{padding:0 0px !important;}");
@@ -22,6 +22,9 @@ GM_addStyle(".readerChapterContent.navBarOffset{padding-top:20px !important;}");
 GM_addStyle(".renderTargetContainer .wr_selection {background: #2bfc005c !important;}");
 GM_addStyle(".renderTargetContainer .wr_underline.s0{border-bottom: 2px solid #7ec307ed;background-image: none !important;}");
 GM_addStyle(".readerChapterContent .s-pic,.preRenderContainer .preRenderContent img, .renderTargetContainer .renderTargetContent img {opacity: 1 !important;transform:scale(1,1.1);filter:drop-shadow(0.05em 0);;margin-top:-.15em !important;margin-left:-.02em !important;}");
+// GM_addStyle(".readerChapterContent span[class*= ccn-]{color:#c6efd33b !important}");
+GM_addStyle(".reader_float_search_panel_wrapper .search_panel[data-v-5e8b3228] {width: 60vw; !important}");
+GM_addStyle(".font-panel-content-arrow{display:none !important;}");
 
 
 GM_addStyle(".readerTopBar,.readerNoteList,.readerTopBar_title_chapter,.readerTopBar_title_link,.bookInfo_title,.readerCatalog_list{font-family: SourceHanSerifCN-Bold !important;}");
@@ -29,20 +32,33 @@ GM_addStyle(".readerTopBar,.readerNoteList,.readerTopBar_title_chapter,.readerTo
 
 GM_addStyle(".readerWriteReviewPanel{height:60% !important;}");
 
-GM_addStyle(".readding{border: darkgreen 2px solid !important;box-sizing: border-box; animation: myRotate 60s linear infinite;}");
-GM_addStyle(".freshing{border: darkorange 2px solid !important;box-sizing: border-box; animation: myRotate 60s linear infinite;}");
+GM_addStyle(".readding{border: darkgreen 2px solid !important;box-sizing: border-box; }");
+GM_addStyle(".freshing{border: darkorange 2px solid !important;box-sizing: border-box; }");
+GM_addStyle(".rounding{animation: myRotate 60s linear infinite;}");
 GM_addStyle(".wr_avatar_img{border: darkorange 2px solid;box-sizing: border-box;}");
 GM_addStyle("@keyframes myRotate{0%{transform: rotate(0);}100%{transform: rotate(360deg);}}");
 
+// 浅色
+GM_addStyle(".wr_whiteTheme .readerContent .app_content {background-color: #C7EDCC;}");
+GM_addStyle(".wr_whiteTheme .readerControls_fontSize, .wr_whiteTheme .readerControls_item{background-color: #4caf5040 !important;}");
+
+GM_addStyle(".wr_whiteTheme .readerTopBar {border-bottom-color: rgba(33,40,50,.1);background-color: #C7EDCC;}");
+
+// GM_addStyle("span[class^='wr_absolute ccn'] {color: #c6efd326 !important;font: 22px / 22px 汉仪楷体, 'ETrump KaiTi', 方正仿宋, FZFSJW--GB1-0, 'PingFang SC', -apple-system, 'SF UI Text', 'Lucida Grande', STheiti, 'Microsoft YaHei', sans-serif;}");
+
+// 双面显示
+GM_addStyle(".wr_horizontalReader_app_content .readerChapterContent_container .readerChapterContent {width:calc(100% - 20px) !important;height: calc(100% - 90px);}");
+GM_addStyle(".wr_horizontalReader .readerControls{z-index: 999 !important; right:15px !important;}");
 
 var z;
-var hidden, state, visibilityChange;
+var hidden, state, visibilityChange,allowAutoFresh;
 (function(){
     'use strict';
     z=document.body.style.zoom||1;
+    allowAutoFresh=true;
     document.onclick=function(event){
         // console.log(event.target);
-        if(event.target&&hasClassName(event.target,"icon"))
+        if(event.target && hasClassName(event.target,"icon"))
         {
             return false;
         }
@@ -50,11 +66,19 @@ var hidden, state, visibilityChange;
         {
             document.getElementsByClassName("readerTopBar")[0].style.display='flex';
             document.getElementsByClassName("readerControls")[0].style.display='flex';
+            if(document.getElementsByClassName("wr_horizontalReader").length>0){
+                document.getElementsByClassName("wr_horizontalReader")[0].getElementsByClassName("readerChapterContent")[0].style.marginTop='72px';
+                document.getElementsByClassName("wr_horizontalReader")[0].getElementsByClassName("readerChapterContent")[0].style.height='calc(100% - 90px)';
+            }
         }
         else
         {
             document.getElementsByClassName("readerTopBar")[0].style.display='none';
             document.getElementsByClassName("readerControls")[0].style.display='none';
+            if(document.getElementsByClassName("wr_horizontalReader").length>0){
+                document.getElementsByClassName("wr_horizontalReader")[0].getElementsByClassName("readerChapterContent")[0].style.marginTop='12px';
+                document.getElementsByClassName("wr_horizontalReader")[0].getElementsByClassName("readerChapterContent")[0].style.height='calc(100% - 30px)';
+            }
         }
     }
 
@@ -96,16 +120,32 @@ var hidden, state, visibilityChange;
 
     // 添加监听器,监听鼠标进入页面
     document.addEventListener('mouseenter', (e)=> {
-        console.log('mouseenter');
+        // console.log('mouseenter');
         StopAutoRefresh();
         ReSize();
     }, false);
 
     // 添加监听器,监听鼠标离开页面
     document.addEventListener('mouseleave', (e)=> {
-        console.log('mouseleave');
-        StartAutoRefresh();
+        // console.log('mouseleave');
+        if(allowAutoFresh){
+            StartAutoRefresh();
+        }
     }, false);
+
+    let avatar =document.getElementsByClassName("wr_avatar_img")[0];
+    avatar.addEventListener('click', (e)=> {
+        if(avatar.classList.contains('rounding')){
+            NoRounding();
+            allowAutoFresh=false;
+            StopAutoRefresh();
+        }
+        else{
+            AddRounding();
+            allowAutoFresh=true;
+        }
+    }, false);
+
     CheckVisable();
 
 })();
@@ -144,11 +184,16 @@ function zoomBody(tag)
 var AutoReFresh=null;
 function CheckVisable(){
     let stt=document[state];
-    console.log('visibilityChange',stt)
+    // console.log('visibilityChange',stt)
     let avatar =document.getElementsByClassName("wr_avatar_img")[0];
+    if(allowAutoFresh){
+        AddRounding();
+    }
     if(stt!=='visible'|| avatar.classList.contains('readding')===false)
     {
-        StartAutoRefresh();
+        if(allowAutoFresh){
+            AutoReFresh= StartAutoRefresh();
+        }
     }
     else{
         StopAutoRefresh();
@@ -156,25 +201,29 @@ function CheckVisable(){
 }
 
 function StartAutoRefresh(){
-    console.log('StartAutoReFresh '+(new Date()).toString(),AutoReFresh);
+    // console.log('StartAutoReFresh '+(new Date()).toString(),AutoReFresh);
     ShowFreshing();
-    AutoReFresh=setInterval(()=>{
+    let AutoReFresh=setInterval(()=>{
         let avatar =document.getElementsByClassName("wr_avatar_img")[0];
         let stt=document[state];
-        if(stt!=='visible'||!avatar.classList.contains('readding')){
-            window.location.reload();
-            console.log('AutoReFresh-Interval '+(new Date()).toString(),AutoReFresh);
+        if((stt!=='visible'||!avatar.classList.contains('readding'))&&allowAutoFresh){
+            // window.location.reload();
+            clearInterval(AutoReFresh);
+            AutoReFresh=null
+            window.location.replace(window.location.href);
+            // console.log('AutoReFresh-Interval '+(new Date()).toString(),AutoReFresh);
         }
 
     },61*1000);
-
+    return AutoReFresh
 }
 
 function StopAutoRefresh(){
     if(AutoReFresh)
     {
         clearInterval(AutoReFresh);
-        console.log('StopAutoReFresh '+(new Date()).toString(),AutoReFresh);
+        AutoReFresh=null
+        // console.log('StopAutoReFresh '+(new Date()).toString(),AutoReFresh);
         ShowReadding();
     }
 }
@@ -199,8 +248,21 @@ function ShowFreshing(){
     }
 }
 
+function NoRounding(){
+    let avatar =document.getElementsByClassName("wr_avatar_img")[0];
+    if(avatar.classList.contains('rounding')){
+        avatar.classList.remove('rounding');
+    }
+}
+function AddRounding(){
+    let avatar =document.getElementsByClassName("wr_avatar_img")[0];
+    if(!avatar.classList.contains('rounding')){
+        avatar.classList.add('rounding');
+    }
+}
+
 function ReSize(){
     var ReSize = new Event('resize');
     window.dispatchEvent(ReSize);
-    console.log('resize');
+    // console.log('resize');
 }
